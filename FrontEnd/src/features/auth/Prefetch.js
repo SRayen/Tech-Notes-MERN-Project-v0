@@ -12,11 +12,16 @@ const Prefetch = () => {
     console.log("subscribing");
     /*Manually subscription to Users & Notes ==> We will have access to that state and it will 
     not expire (in 60s (default time))*/
+    /*Prefetching relies on the powerful api.endpoints.<queryName>.initiate() method that underlies much 
+    RTK Query's internals. For RTK Query to process and store initiate() calls properly they have to be
+     sent into the redux store with store.dispatch().*/
+
     const notes = store.dispatch(notesApiSlice.endpoints.getNotes.initiate());
     const users = store.dispatch(usersApiSlice.endpoints.getUsers.initiate());
 
     return () => {
       console.log("unsubscribing");
+      //This ensures that the subscriptions are properly cleaned up to avoid memory leaks.
       notes.unsubscribe();
       users.unsubscribe();
     };

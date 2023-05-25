@@ -12,12 +12,14 @@ const initialState = notesAdapter.getInitialState();
 export const notesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getNotes: builder.query({
-      query: () => "/notes",
-      validateStatus: (response, result) => {
-        return response.status === 200 && !result.isError;
-      },
+      query: () => ({
+        url: "/notes",
+        validateStatus: (response, result) => {
+          return response.status === 200 && !result.isError;
+        },
+      }),
       //A number (second) that determines how long the unused data for the query will be kept in the cache.
-    //   keepUnusedDataFor: 5,
+      //   keepUnusedDataFor: 5,
       //transformResponse: used to transform the API response data before storing it in the Redux store.
       transformResponse: (responseData) => {
         const loadedNotes = responseData.map((note) => {

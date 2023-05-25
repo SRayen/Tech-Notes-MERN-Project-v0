@@ -12,19 +12,20 @@ const Prefetch = () => {
     console.log("subscribing");
     /*Manually subscription to Users & Notes ==> We will have access to that state and it will 
     not expire (in 60s (default time))*/
-    /*Prefetching relies on the powerful api.endpoints.<queryName>.initiate() method that underlies much 
-    RTK Query's internals. For RTK Query to process and store initiate() calls properly they have to be
-     sent into the redux store with store.dispatch().*/
 
-    const notes = store.dispatch(notesApiSlice.endpoints.getNotes.initiate());
-    const users = store.dispatch(usersApiSlice.endpoints.getUsers.initiate());
+    /* In Redux Toolkit Query (RTK-Query), the prefetch function is used to initiate a "prefetch" action for a specific API endpoint.
+     This action triggers a request to fetch the data for that endpoint and stores it in the cache, making it available for subsequent
+     use */
 
-    return () => {
-      console.log("unsubscribing");
-      //This ensures that the subscriptions are properly cleaned up to avoid memory leaks.
-      notes.unsubscribe();
-      users.unsubscribe();
-    };
+    /* { force: true }: This is an optional configuration object that can be passed to the prefetch function. In this case,
+     force: true is used to indicate that the data should be refetched even if it exists in the cache. This can be useful when you
+      want to explicitly refresh the data.*/
+    store.dispatch(
+      notesApiSlice.util.prefetch("getNotes", "notesList", { force: true })
+    );
+    store.dispatch(
+      usersApiSlice.util.prefetch("getUsers", "usersList", { force: true })
+    );
   }, []);
 
   return <Outlet />;

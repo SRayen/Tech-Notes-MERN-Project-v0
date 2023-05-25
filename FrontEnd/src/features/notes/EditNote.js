@@ -1,26 +1,44 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectNoteById } from "./notesApiSlice";
-import { selectAllUsers } from "../users/usersApiSlice";
 import EditNoteForm from "./EditNoteForm";
 import { SpinnerDiamond } from "spinners-react";
+import { useGetNotesQuery } from "./notesApiSlice";
+import { useGetUsersQuery } from "../users/usersApiSlice";
+import useAuth from "../../hooks/useAuth";
 
 const EditNote = () => {
+  console.log("hello from  edit note");
   const { id } = useParams();
 
-  const note = useSelector((state) => selectNoteById(state, id));
-  const users = useSelector(selectAllUsers);
+  const { username, isManager, isAdmin } = useAuth();
 
-  const content =
-    note && users ? (
-      <EditNoteForm note={note} users={users} />
-    ) : (
+  const { note } = useGetNotesQuery("notesList", {
+    selectFromResult: ({ data }) => ({
+      note: data?.entities[id],
+    }),
+  });
+
+  const { users } = useGetUsersQuery("usersList", {
+    selectFromResult: ({ data }) => ({
+      users: data?.ids.map((id) => data?.entities[id]),
+    }),
+  });
+
+  if (!note || !users?.length)
+    return (
       <SpinnerDiamond
         style={{ margin: "80px 500px" }}
         size={"30%"}
         speed={70}
       />
     );
+
+  if (!isManager && !isAdmin) {
+    if (note.username !== username) {
+      return <p className="errmsg">No access</p>;
+    }
+  }
+
+  const content = <EditNoteForm note={note} users={users} />;
 
   return content;
 };

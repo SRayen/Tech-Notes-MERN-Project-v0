@@ -1,12 +1,25 @@
-import { useSelector } from 'react-redux'
-import { selectAllUsers } from '../users/usersApiSlice'
-import NewNoteForm from './NewNoteForm'
+import NewNoteForm from "./NewNoteForm";
+import { useGetUsersQuery } from "../users/usersApiSlice";
+import { SpinnerDiamond } from "spinners-react";
 
 const NewNote = () => {
-    const users = useSelector(selectAllUsers)
+  const { users } = useGetUsersQuery("usersList", {
+    selectFromResult: ({ data }) => ({
+      users: data?.ids.map((id) => data?.entities[id]),
+    }),
+  });
 
-    const content = users ? <NewNoteForm users={users} /> : <p>Loading...</p>
+  if (!users?.length)
+    return (
+      <SpinnerDiamond
+        style={{ margin: "80px 500px" }}
+        size={"30%"}
+        speed={70}
+      />
+    );
 
-    return content
-}
-export default NewNote
+  const content = <NewNoteForm users={users} />;
+
+  return content;
+};
+export default NewNote;

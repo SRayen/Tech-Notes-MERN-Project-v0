@@ -10,10 +10,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     //GET USERS
     getUsers: builder.query({
-      query: () => "/users",
-      validateStatus: (response, result) => {
-        return response.status === 200 && !result.isError;
-      },
+      query: () => ({
+        url: "/users",
+        validateStatus: (response, result) => {
+          return response.status === 200 && !result.isError;
+        },
+      }),
       //A number (second) that determines how long the unused data for the query will be kept in the cache.
     //   keepUnusedDataFor: 5,
       //transformResponse: used to transform the API response data before storing it in the Redux store.
@@ -85,7 +87,7 @@ const selectUsersData = createSelector(
 //getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
   selectAll: selectAllUsers,
-  selectById: selectUserById,
+  selectById: selectUserById, 
   selectIds: selectUserIds,
   //Pass in a selector that returns the users slice of state
 } = usersAdapter.getSelectors(

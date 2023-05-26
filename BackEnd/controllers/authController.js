@@ -30,14 +30,14 @@ const login = async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1m" }
+    { expiresIn: "15s" }
   );
 
   const refreshToken = jwt.sign(
     { username: foundUser.username },
     process.env.REFRESH_TOKEN_SECRET,
     //Users won't have to logIn every day (expiresIn param) if they don't log out!
-    { expiresIn: "10m" }
+    { expiresIn: "50s" }
   );
 
   // Create secure cookie with refresh token
@@ -84,7 +84,7 @@ const refresh = (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "1m" }
+        { expiresIn: "15s" }
       );
 
       res.json({ accessToken });

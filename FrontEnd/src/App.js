@@ -17,28 +17,28 @@ import RequireAuth from "./features/auth/RequireAuth";
 import useTitle from "./hooks/useTitle";
 
 function App() {
-  useTitle('Rayen Tech-Notes')
+  useTitle("Rayen Tech-Notes");
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* PUBLIC ROUTES */}
         <Route index element={<Public />} />
         <Route path="login" element={<Login />} />
-
         {/* PROTECTED ROUTES */}
-
-        {/* Prefetch component is used to fetch and subscribe to data from the server before rendering
-         the nested routes in the application's dashboard  */}
-        {/* To understand more : if you comment the route to Prefetch component and you open Redux
-         DevTools : you will see that the Redux DevTools subscribes to the Redux store 
-        and displays the data in the Redux DevTools only for 60s and then it will unsubscribe because:
-         When data is fetched using Redux Toolkit Query, it is automatically cached in the Redux store
-          with a default expiration time. By default, the cached data will expire after a certain period
-           of time (usually 60 seconds) unless it is refetched */}
+        
+        {/* PersistLogin:  handle the persistence of the login state or authentication token across
+        different sessions. It is likely responsible for restoring the user's
+        authentication state when the application is reloaded or reopened. */}
         <Route element={<PersistLogin />}>
           <Route
             element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
           >
+            {/* Prefetch : The goal of prefetching is to make data fetch before the user navigates to a page or attempts to load
+          some known content. */}
+            {/* The prefetch feature allows you to fetch data before it's explicitly
+        requested by the UI, anticipating the user's needs and reducing
+        perceived loading times */}
+            {/* To understand more : You can see the diff in Redux DevTools with and without prefetching (no subscribes & no data) */}
             <Route element={<Prefetch />}>
               <Route path="dash" element={<DashLayout />}>
                 <Route index element={<Welcome />} />

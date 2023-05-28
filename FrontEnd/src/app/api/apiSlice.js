@@ -19,7 +19,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   // console.log(args) // request url, method, body
   // console.log(api) // signal, dispatch, getState()
-  // console.log(extraOptions) //custom like {shout: true}
+  // console.log(extraOptions) //custom like {shout: true};
 
   let result = await baseQuery(args, api, extraOptions);
 
@@ -50,7 +50,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 export const apiSlice = createApi({
-  baseQuery: baseQueryWithReauth, //Rq:First time==>Access Token ==>403 ==> Refresh Token ==>AccessToken ... 
+  //First Time (Access Token is valid): baseQuery : baseQuery
+  //Next Time (Access Token is not valid): baseQuery : baseQueryWithReauth
+  baseQuery: baseQueryWithReauth, //Rq:First time==>Access Token ==>403 ==> Refresh Token ==>AccessToken ...
   //tagTypes: will be used for cached data
   tagTypes: ["Note", "User"],
   endpoints: (builder) => ({}),

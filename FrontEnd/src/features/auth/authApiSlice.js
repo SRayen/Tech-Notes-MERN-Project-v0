@@ -46,7 +46,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
      and the others. 
      Why we have used mutation and no Query ? ==> because mutation refers to our state - and we will be replacing the Access Token in
       our Redux state with (Since the operation of refreshing the token modifies the state of the application, it is considered a mutation.) */
-    /* In RTK Query, mutations are used when performing operations that modify data or have side effects, such as creating, updating, or deleting data. Queries, on the other hand, are used for retrieving data without modifying the state.*/
+    /* In RTK Query, mutations are used when performing operations that modify data or have side effects, such as creating, updating, or deleting data.
+     Queries, on the other hand, are used for retrieving data without modifying the state.*/
     refresh: builder.mutation({
       query: () => ({
         url: "/auth/refresh",

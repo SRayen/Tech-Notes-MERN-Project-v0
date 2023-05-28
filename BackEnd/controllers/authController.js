@@ -37,7 +37,7 @@ const login = async (req, res) => {
     { username: foundUser.username },
     process.env.REFRESH_TOKEN_SECRET,
     //Users won't have to logIn every day (expiresIn param) if they don't log out!
-    { expiresIn: "50s" }
+    { expiresIn: "5m" }
   );
 
   // Create secure cookie with refresh token
